@@ -1,3 +1,6 @@
+// @dart=2.9
+import './main.dart';
+
 import 'package:flutter/material.dart';
 import 'package:calculator/screens/home.dart';
 

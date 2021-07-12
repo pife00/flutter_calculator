@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:calculator/constant/constant.dart';
 import 'package:calculator/widgets/button.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,6 +11,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String _history = "";
+  String _expression = "";
+
+  void _numClick(String text) {
+    setState(() {
+      _expression =  _expression + text;
+    });
+  
+  }
+
+  void _allClear(String text) {
+    setState(() {
+      _expression =  '';
+      _history = '';
+    });
+  }
+
+  void _evaludate(String text){
+    Parser p = Parser();
+    Expression exp = p.parse(_expression);
+    ContextModel cm = ContextModel();
+    double eval = exp.evaluate(EvaluationType.REAL, cm);
+
+    setState(() {
+      _history = _expression;
+      _expression = eval.toString();
+
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,68 +58,72 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(right:30.0),
-                     
-              child: Text(
-            "123",
-            style: TextStyle(fontSize: 48, color: Colors.white70),
+            padding: EdgeInsets.only(right: 30.0),
+            child: Text(
+              _history,
+              style: TextStyle(fontSize: 24, color: Colors.white70),
+            ),
+            alignment: Alignment(1, 1),
           ),
-          alignment: Alignment(1,1),
+          Container(
+            padding: EdgeInsets.only(right: 30.0),
+            child: Text(
+              _expression,
+              style: TextStyle(fontSize: 48, color: Colors.white54),
+            ),
+            alignment: Alignment(1, 1),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Button(
-                value: "AC",
-                colorFill: 0xFFFFFFFF,
-              ),
-              Button(value: "C", colorFill: 0xFFFFFFFF),
-              Button(value: "%", colorFill: 0xFFFFFFFF),
-              Button(value: "/", colorFill: 0xFFFFFFFF),
+                  value: "AC", colorFill: 0xFFFFFFFF, callback:_allClear),
+              Button(
+                  value: "C", colorFill: 0xFFFFFFFF, callback: _numClick),
+              Button(
+                  value: "%", colorFill: 0xFFFFFFFF, callback: _numClick),
+              Button(
+                  value: "/", colorFill: 0xFFFFFFFF, callback: _numClick),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
+              Button(value: "7", callback: _numClick),
+              Button(value: "8", callback: _numClick),
+              Button(value: "9", callback: _numClick),
               Button(
-                value: "7",
-              ),
-              Button(value: "8"),
-              Button(value: "9"),
-              Button(value: "x", colorFill: 0xFFFFFFFF),
+                  value: "*", colorFill: 0xFFFFFFFF, callback: _numClick),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
+              Button(value: "4", callback: _numClick),
+              Button(value: "5", callback: _numClick),
+              Button(value: "6", callback: _numClick),
               Button(
-                value: "4",
-              ),
-              Button(value: "5"),
-              Button(value: "6"),
-              Button(value: "-", colorFill: 0xFFFFFFFF),
+                  value: "-", colorFill: 0xFFFFFFFF, callback: _numClick),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
+              Button(value: "1", callback: _numClick),
+              Button(value: "2", callback: _numClick),
+              Button(value: "3", callback: _numClick),
               Button(
-                value: "1",
-              ),
-              Button(value: "2"),
-              Button(value: "3"),
-              Button(value: "+", colorFill: 0xFFFFFFFF),
+                  value: "+", colorFill: 0xFFFFFFFF, callback: _numClick),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Button(value: ""),
+              Button(value: "", callback: _numClick),
+              Button(value: "00", callback: _numClick),
+              Button(value: "", callback: _numClick),
               Button(
-                value: "00",
-              ),
-              Button(value: ""),
-              Button(value: "=", colorFill: 0xFFFFFFFF),
+                  value: "=", colorFill: 0xFFFFFFFF, callback: _evaludate),
             ],
           ),
         ],
